@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "nombre": "Ember",
+    "tipoComida": "Carne",
+    "capacidadPorGrupoHora": 3,
+    "horarios": ["18:00-20:00", "20:00-22:00"]
+  },
+  {
+    "id": 2,
+    "nombre": "Zao",
+    "tipoComida": "Japonés",
+    "capacidadPorGrupoHora": 4,
+    "horarios": ["18:00-20:00", "20:00-22:00"]
+  },
+  {
+    "id": 3,
+    "nombre": "Grappa",
+    "tipoComida": "Italiano",
+    "capacidadPorGrupoHora": 2,
+    "horarios": ["18:00-20:00", "20:00-22:00"]
+  },
+  {
+    "id": 4,
+    "nombre": "Larimar",
+    "tipoComida": "Marisco",
+    "capacidadPorGrupoHora": 3,
+    "horarios": ["18:00-20:00", "20:00-22:00"]
+  }
+]
