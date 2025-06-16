@@ -5,7 +5,9 @@ const reservaRoutes = require('./routes/reservaRoutes');
 const app = express();
 const PORT = 3001;
 
-app.use(cors()); // No recomendado en producción
+app.use(cors({
+  origin: 'https://senator-ten.vercel.app'
+}));
 
 app.use(express.json());
 
