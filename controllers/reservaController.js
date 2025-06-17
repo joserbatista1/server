@@ -63,11 +63,24 @@ function irReservaciones() {
 
   
 }
+function eliminarReserva(req, res) {
+  const { id } = req.params;
+  const idNum = parseInt(id);
+
+  const index = reservas.findIndex(r => r.id === idNum);
+  if (index === -1) {
+    return res.status(404).json({ mensaje: 'Reserva no encontrada' });
+  }
+
+  reservas.splice(index, 1);
+  res.json({ mensaje: 'Reserva eliminada' });
+}
 
 
 module.exports = {
   irReservaciones,
   realizarReserva,
   verReservas,
-  reservasPorRestaurante
+  reservasPorRestaurante,
+  eliminarReserva
 };
