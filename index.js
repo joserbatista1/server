@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3001;
 
 app.use(cors({
-  origin: 'https://senator-git-main-jose-rabel-batista-ramos-projects.vercel.app/'
+  origin: 'https://senator-ten.vercel.app'
 }));
 
 app.use(express.json());
