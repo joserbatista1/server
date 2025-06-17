@@ -7,7 +7,7 @@ const {
   eliminarReserva
 } = require('../controllers/reservaController');
 
-router.delete("/eliminar:id")
+router.delete('/eliminar:id')
 router.post('/', realizarReserva);                    // Crear nueva reserva
 router.get('/', verReservas);                         // Ver reservas por hora
 router.get('/:restaurante/:hora', reservasPorRestaurante); // Listar reservas por restaurante y hora
