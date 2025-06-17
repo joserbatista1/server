@@ -5,9 +5,22 @@ const reservaRoutes = require('./routes/reservaRoutes');
 const app = express();
 const PORT = 3001;
 
-app.use(cors({
-  origin: 'https://senator-ten.vercel.app'
-}));
+// Lista de orígenes permitidos
+const whitelist = ['https://senator-ten.vercel.app', 'localhost:3000'];
+
+// app.use(cors({
+//   origin: function (origin, callback) {
+//     // Permitir solicitudes sin origin (como curl o Postman)
+//     if (!origin) return callback(null, true);
+//     if (whitelist.includes(origin)) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('No permitido por CORS'));
+//     }
+//   }
+// }));
+app.use(cors());
+
 
 app.use(express.json());
 
