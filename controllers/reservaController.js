@@ -19,7 +19,7 @@ function guardarReservas(reservas) {
 // POST /api/reservas
 function realizarReserva(req, res) {
   const { nombre, cantidad, restaurante, hora } = req.body;
-  if (!nombre || !cantidad || !restaurante || !hora) {
+  if (!nombre || !cantidad || !restaurante || !hora || !fecha) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
 
@@ -40,7 +40,8 @@ function realizarReserva(req, res) {
     nombre,
     cantidad,
     restaurante: r.nombre,
-    hora
+    hora,
+    fecha
   };
 
   reservas.push(nuevaReserva);
