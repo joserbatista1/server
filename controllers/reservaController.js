@@ -75,6 +75,28 @@ function eliminarReserva(req, res) {
   reservas.splice(index, 1);
   res.json({ mensaje: 'Reserva eliminada' });
 }
+function modificarReserva(req, res) {
+  const { id } = req.params;
+  const idNum = parseInt(id);
+  const { nombre, cantidad, restaurante, hora } = req.body;
+
+  if (!nombre || !cantidad || !restaurante || !hora) {
+    return res.status(400).json({ mensaje: 'Faltan datos' });
+  }
+
+  const reserva = reservas.find(r => r.id === idNum);
+  if (!reserva) {
+    return res.status(404).json({ mensaje: 'Reserva no encontrada' });
+  }
+
+  reserva.nombre = nombre;
+  reserva.cantidad = cantidad;
+  reserva.restaurante = restaurante;
+  reserva.hora = hora;
+
+  res.json({ mensaje: 'Reserva modificada correctamente', reserva });
+}
+
 
 
 module.exports = {
@@ -82,5 +104,6 @@ module.exports = {
   realizarReserva,
   verReservas,
   reservasPorRestaurante,
-  eliminarReserva
+  eliminarReserva,
+  modificarReserva
 };
