@@ -6,7 +6,7 @@ const app = express();
 const PORT = 3001;
 
 // Lista de orígenes permitidos
-const whitelist = ['https://senator-ten.vercel.app', 'localhost:3000'];
+const whitelist = ['https://senator-ten.vercel.app', '181.224.204.162:3000'];
 
 // app.use(cors({
 //   origin: function (origin, callback) {
