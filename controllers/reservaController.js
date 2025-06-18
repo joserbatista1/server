@@ -1,11 +1,24 @@
+const fs = require('fs');
+const path = require('path');
 const restaurantes = require('../data/restaurantes.json');
 
-let reservas = []; // Reservas en memoria
+// Ruta al archivo JSON
+const reservasPath = path.join(__dirname, '../data/reservas.json');
+
+// Funciones auxiliares
+function leerReservas() {
+  if (!fs.existsSync(reservasPath)) return [];
+  const data = fs.readFileSync(reservasPath, 'utf-8');
+  return JSON.parse(data);
+}
+
+function guardarReservas(reservas) {
+  fs.writeFileSync(reservasPath, JSON.stringify(reservas, null, 2));
+}
 
 // POST /api/reservas
 function realizarReserva(req, res) {
   const { nombre, cantidad, restaurante, hora } = req.body;
-
   if (!nombre || !cantidad || !restaurante || !hora) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
@@ -13,6 +26,7 @@ function realizarReserva(req, res) {
   const r = restaurantes.find(r => r.nombre.toLowerCase() === restaurante.toLowerCase());
   if (!r) return res.status(404).json({ mensaje: 'Restaurante no encontrado' });
 
+  const reservas = leerReservas();
   const reservasEnHora = reservas.filter(res =>
     res.restaurante === r.nombre && res.hora === hora
   );
@@ -22,7 +36,7 @@ function realizarReserva(req, res) {
   }
 
   const nuevaReserva = {
-    id: reservas.length + 1,
+    id: reservas.length > 0 ? reservas[reservas.length - 1].id + 1 : 1,
     nombre,
     cantidad,
     restaurante: r.nombre,
@@ -30,12 +44,16 @@ function realizarReserva(req, res) {
   };
 
   reservas.push(nuevaReserva);
+  guardarReservas(reservas);
+
   res.status(201).json({ mensaje: 'Reserva realizada', reserva: nuevaReserva });
 }
 
 // GET /api/reservas?hora=20:00-22:00
 function verReservas(req, res) {
   const { hora } = req.query;
+  const reservas = leerReservas();
+
   const disponibles = restaurantes.map(r => {
     const ocupados = reservas.filter(res => res.restaurante === r.nombre && res.hora === hora);
     return {
@@ -50,22 +68,19 @@ function verReservas(req, res) {
 // GET /api/reservas/:restaurante/:hora
 function reservasPorRestaurante(req, res) {
   const { restaurante, hora } = req.params;
+  const reservas = leerReservas();
+
   const lista = reservas.filter(r =>
     r.restaurante.toLowerCase() === restaurante.toLowerCase() && r.hora === hora
   );
   res.json(lista);
 }
-function irReservaciones() {
-  const element = document.getElementById('reservas');
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-  }
 
-  
-}
+// DELETE /api/reservas/eliminar/:id
 function eliminarReserva(req, res) {
   const { id } = req.params;
   const idNum = parseInt(id);
+  let reservas = leerReservas();
 
   const index = reservas.findIndex(r => r.id === idNum);
   if (index === -1) {
@@ -73,8 +88,12 @@ function eliminarReserva(req, res) {
   }
 
   reservas.splice(index, 1);
+  guardarReservas(reservas);
+
   res.json({ mensaje: 'Reserva eliminada' });
 }
+
+// PUT /api/reservas/modificar/:id
 function modificarReserva(req, res) {
   const { id } = req.params;
   const idNum = parseInt(id);
@@ -84,20 +103,26 @@ function modificarReserva(req, res) {
     return res.status(400).json({ mensaje: 'Faltan datos' });
   }
 
-  const reserva = reservas.find(r => r.id === idNum);
-  if (!reserva) {
+  const reservas = leerReservas();
+  const index = reservas.findIndex(r => r.id === idNum);
+
+  if (index === -1) {
     return res.status(404).json({ mensaje: 'Reserva no encontrada' });
   }
 
-  reserva.nombre = nombre;
-  reserva.cantidad = cantidad;
-  reserva.restaurante = restaurante;
-  reserva.hora = hora;
+  reservas[index] = { id: idNum, nombre, cantidad, restaurante, hora };
+  guardarReservas(reservas);
 
-  res.json({ mensaje: 'Reserva modificada correctamente', reserva });
+  res.json({ mensaje: 'Reserva modificada correctamente', reserva: reservas[index] });
 }
 
-
+// Este es solo del frontend, puedes eliminarlo si no se usa
+function irReservaciones() {
+  const element = document.getElementById('reservas');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+}
 
 module.exports = {
   irReservaciones,
